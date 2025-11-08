@@ -2,7 +2,7 @@ import express, { json } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import {poststudent,getStudent,getPerticularStudent,putUpdateStudent} from "./Controller/student.js";
+import {poststudent,getStudent,getPerticularStudent,putUpdateStudent,postStudentLogin} from "./Controller/student.js";
 //all midleware
 dotenv.config();
 const app = express();
@@ -37,7 +37,9 @@ app.get("/students",getStudent);
 //find perticular
 app.get("/student/:slug",getPerticularStudent);
 //update student details
-app.put("/student/:slug",putUpdateStudent)
+app.put("/student/:slug",putUpdateStudent);
+//student log in
+app.post("/studentlogin",postStudentLogin);
 
 app.listen(8080, () => {
   console.log("server is running");

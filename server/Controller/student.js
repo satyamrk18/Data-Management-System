@@ -149,4 +149,24 @@ const putUpdateStudent = async (req, res) => {
     });
   }
 };
-export { poststudent, getStudent, getPerticularStudent, putUpdateStudent };
+//student log in by college id and mother name
+const postStudentLogin = async (req,res) =>
+{
+  const {college_ID, mother_name} = req.body;
+  const studentData = await Student.findOne({college_ID:college_ID, mother_name:mother_name});
+  if(studentData)
+  {
+    res.status(200).json({
+      success:true,
+      data:studentData,
+      message:"student find successfully !"
+    })
+  }
+  else{
+    res.status(404).json({
+      success:false,
+      message:"user not found please try again later !"
+    })
+  }
+}
+export { poststudent, getStudent, getPerticularStudent, putUpdateStudent,postStudentLogin };
