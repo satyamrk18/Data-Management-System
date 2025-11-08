@@ -13,7 +13,7 @@ app.use(cors());
 
 const conn = async () => {
   const connection = await mongoose.connect(
-    "mongodb+srv://Satyamrk18:raosaheb@personalclusters.hmlbavl.mongodb.net/student"
+    `${process.env.MONGO_URL}`
   );
   if (connection) {
     console.log("Database connect successfully");
