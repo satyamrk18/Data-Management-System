@@ -15,7 +15,7 @@ const loginForm = ({ college_ID, mother_name }) => {
         value={mother_name}
         className="border-1 rounded-lg p-0.5 w-3xs"
       />
-      <button type="button" className="border-1 p-1 rounded-lg w-[100px] cursor-pointer">Log In</button>
+      <button type="button" className="p-1 rounded-lg w-[100px] text-white bg-blue-400 cursor-pointer hover:text-black">Log In</button>
     </div>
   );
 };

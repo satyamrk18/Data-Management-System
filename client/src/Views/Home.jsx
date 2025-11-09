@@ -1,8 +1,9 @@
 import LoginForm from "../components/loginform";
 import poster from "./../assets/college_poster.png";
+import Footer from "./../components/Footer.jsx"
 const Home = () => {
   return (
-    <div className="flex items-center justify-center flex-col gap-10">
+    <div className="flex items-center justify-between flex-col gap-10 ">
       <img src={poster} className="w-full h-[30vh]" />
       <div className="flex flex-row items-center justify-evenly w-full gap-5 flex-wrap">
       <div className="border-1 p-5 rounded-2xl">
@@ -34,6 +35,9 @@ const Home = () => {
       <LoginForm />
       </div>
       </div>
+     
+        <Footer />
+    
     </div>
   );
 };
