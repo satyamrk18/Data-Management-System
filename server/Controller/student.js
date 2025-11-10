@@ -158,7 +158,7 @@ const postStudentLogin = async (req, res) => {
     mother_name: mother_name,
   });
   if (studentData) {
-     //making the pdf of student data
+    //making the pdf of student data
     const doc = new PDFDocument();
     res.setHeader(
       "Content-Disposition",
@@ -169,8 +169,11 @@ const postStudentLogin = async (req, res) => {
     doc.fontSize(20).text("Student Information", { align: "center" });
     doc.moveDown();
     doc.fontSize(14).text(`Name: ${studentData.name}`);
+    doc.text(`Father Name: ${studentData.father_name}`);
+    doc.text(`Mother Name: ${studentData.mother_name}`);
     doc.text(`Roll No: ${studentData.rollNo}`);
     doc.text(`Branch: ${studentData.branch}`);
+      doc.text(`Addhar No:: ${studentData.aadhaNo}`);
     doc.text(`Year of study: ${studentData.year_of_study}`);
     doc.text(`Address : ${studentData.address}`);
     doc.text(`Year: ${studentData.year}`);
