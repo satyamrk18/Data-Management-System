@@ -1,4 +1,5 @@
-import { json, response } from "express";
+import PDFDocument from "pdfkit";
+import fs from "fs";
 import Student from "./../Model/Student.js";
 //add student
 const poststudent = async (req, res) => {
@@ -149,24 +150,42 @@ const putUpdateStudent = async (req, res) => {
     });
   }
 };
-//student log in by college id and mother name
-const postStudentLogin = async (req,res) =>
-{
-  const {college_ID, mother_name} = req.body;
-  const studentData = await Student.findOne({college_ID:college_ID, mother_name:mother_name});
-  if(studentData)
-  {
-    res.status(200).json({
-      success:true,
-      data:studentData,
-      message:"student find successfully !"
-    })
-  }
-  else{
+//student log in by college id and mother name and making pdf
+const postStudentLogin = async (req, res) => {
+  const { college_ID, mother_name } = req.body;
+  const studentData = await Student.findOne({
+    college_ID: college_ID,
+    mother_name: mother_name,
+  });
+  if (studentData) {
+     //making the pdf of student data
+    const doc = new PDFDocument();
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${studentData.name}.pdf"`
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    doc.pipe(res);
+    doc.fontSize(20).text("Student Information", { align: "center" });
+    doc.moveDown();
+    doc.fontSize(14).text(`Name: ${studentData.name}`);
+    doc.text(`Roll No: ${studentData.rollNo}`);
+    doc.text(`Branch: ${studentData.branch}`);
+    doc.text(`Year of study: ${studentData.year_of_study}`);
+    doc.text(`Address : ${studentData.address}`);
+    doc.text(`Year: ${studentData.year}`);
+    doc.end();
+  } else {
     res.status(404).json({
-      success:false,
-      message:"user not found please try again later !"
-    })
+      success: false,
+      message: "user not found please try again later !",
+    });
   }
-}
-export { poststudent, getStudent, getPerticularStudent, putUpdateStudent,postStudentLogin };
+};
+export {
+  poststudent,
+  getStudent,
+  getPerticularStudent,
+  putUpdateStudent,
+  postStudentLogin,
+};
