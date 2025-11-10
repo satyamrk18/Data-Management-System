@@ -8,16 +8,31 @@ const Home = () => {
     mother_name: "" || "",
   });
   const login = async () => {
-    const response = await axios.post(
-      `http://localhost:8080/studentlogin`,
-      studentData
-    );
-    if (response) {
-      setStudentData(response);
-      const data = response.data.data;
-      alert(JSON.stringify(data));
-    } else {
-      alert(response.data.message);
+    try {
+      // Send login data and tell axios to treat response as a file
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/studentlogin`,
+        studentData,
+        { responseType: "blob" } // 👈 this is the key for PDF download
+      );
+      setStudentData({ ...studentData, college_ID: "" });
+      setStudentData({ ...studentData, mother_name: "" });
+      if (response.status === 200) {
+        // Create a temporary URL for the PDF blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${studentData.college_ID}_info.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        alert("Login failed. Please check your details.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Invalid credentials or server error!");
     }
   };
   return (
