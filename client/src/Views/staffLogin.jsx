@@ -2,11 +2,19 @@ import poster from "./../assets/college_poster.png";
 import Footer from "./../components/Footer.jsx";
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
+import axios from "axios"
 const staffLogIn = () => {
-  const [studentData, setStudentData] = useState({
-    college_ID: "" || "",
-    mother_name: "" || "",
+  const [staffData, setstaffData] = useState({
+    email: "" || "",
+    password: "" || "",
   });
+
+  //log in
+  const login = async ()=>
+  {
+       
+  }
+
   return (
     <div className="flex items-center justify-between flex-col gap-10 ">
       <img src={poster} className="w-full h-[30vh]" />
@@ -48,20 +56,20 @@ const staffLogIn = () => {
           <div className="flex flex-col items-center justify-center gap-5">
             <input
               type="text"
-              placeholder="Enter college ID"
-              value={studentData.college_ID || ""}
+              placeholder="Enter your email"
+              value={staffData.email || ""}
               onChange={(e) => {
-                setStudentData({ ...studentData, college_ID: e.target.value });
+                setstaffData({ ...staffData, email: e.target.value });
               }}
               className="border rounded-lg p-0.5 w-3xs"
               required
             />
             <input
               type="text"
-              placeholder="Enter Mother Name"
-              value={studentData.mother_name || ""}
+              placeholder="Enter password"
+              value={staffData.password || ""}
               onChange={(e) => {
-                setStudentData({ ...studentData, mother_name: e.target.value });
+                setstaffData({ ...staffData, password: e.target.value });
               }}
               required
               className="border rounded-lg p-0.5 w-3xs"

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import {poststudent,getStudent,getPerticularStudent,putUpdateStudent,postStudentLogin} from "./Controller/student.js";
-import {postStaff} from "./Controller/staff.js"
+import {postStaff,staffLogIn} from "./Controller/staff.js"
 //all midleware
 dotenv.config();
 const app = express();
@@ -44,6 +44,8 @@ app.post("/studentlogin",postStudentLogin);
 
 //STAFF 
 app.post("/addStaff",postStaff);
+//check email and password for staff log in
+app.post("/stafflogin",staffLogIn);
 
 app.listen(8080, () => {
   console.log("server is running");
