@@ -1,6 +1,6 @@
 import poster from "./../assets/college_poster.png";
 import Footer from "./../components/Footer.jsx";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 const staffLogIn = () => {
@@ -11,15 +11,25 @@ const staffLogIn = () => {
 
   //log in
   const login = async () => {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/staffLogIn`,
-      staffData
-    );
-    if (response) {
-      alert(response.data.message);
-      setstaffData({email:"",password:""})
-    } else {
-      alert(response.data.message);
+    if (!staffData.email || !staffData.password) {
+      return alert("All feilds are required");
+    }
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/staffLogIn`,
+        staffData
+      );
+      if (response.data.success) {
+        alert(response.data.message);
+        setstaffData({ email: "", password: "" });
+        window.location.href = "/students";
+      }
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message); 
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 

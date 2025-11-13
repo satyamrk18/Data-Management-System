@@ -33,6 +33,7 @@ const postStaff = async (req, res) => {
 //check staff log in
 const staffLogIn = async (req,res)=>
 {
+  
   try{
     const {email,password}= req.body;
   const response = await Staff.findOne({email,password})
@@ -45,7 +46,7 @@ const staffLogIn = async (req,res)=>
     })
   }
   else{
-    res.status(400).json({
+    res.status(401).json({
       success:false,
       message:"please reenter email and password correctly."
     })
