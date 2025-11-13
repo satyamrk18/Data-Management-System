@@ -65,7 +65,7 @@ const Home = () => {
             <li>
               कृपया या लिंकवर क्लिक करा कर्मचारी लॉगिनसाठी.{" "}
               <Link to="/stafflogin" className="text-blue-500 underline">
-                कर्मचारी लॉगिनसाठी
+                कर्मचारी लॉगिन
               </Link>
             </li>
           </ol>
