@@ -1,6 +1,7 @@
 import poster from "./../assets/college_poster.png";
 import Footer from "./../components/Footer.jsx";
 import axios from "axios";
+import { Link } from "react-router";
 import { useState, useEffect } from "react";
 const Home = () => {
   const [studentData, setStudentData] = useState({
@@ -61,6 +62,12 @@ const Home = () => {
               स्क्रीनवर दिसेल.
             </li>
             <li>वापर पूर्ण झाल्यानंतर "Logout" बटणावर क्लिक करा.</li>
+            <li>
+              कृपया या लिंकवर क्लिक करा कर्मचारी लॉगिनसाठी.{" "}
+              <Link to="/stafflogin" className="text-blue-500 underline">
+                कर्मचारी लॉगिनसाठी
+              </Link>
+            </li>
           </ol>
         </div>
         <div>
