@@ -2,7 +2,7 @@ import poster from "./../assets/college_poster.png";
 import Footer from "./../components/Footer.jsx";
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
-import axios from "axios"
+import axios from "axios";
 const staffLogIn = () => {
   const [staffData, setstaffData] = useState({
     email: "" || "",
@@ -10,10 +10,18 @@ const staffLogIn = () => {
   });
 
   //log in
-  const login = async ()=>
-  {
-       
-  }
+  const login = async () => {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/staffLogIn`,
+      staffData
+    );
+    if (response) {
+      alert(response.data.message);
+      setstaffData({email:"",password:""})
+    } else {
+      alert(response.data.message);
+    }
+  };
 
   return (
     <div className="flex items-center justify-between flex-col gap-10 ">
