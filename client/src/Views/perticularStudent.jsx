@@ -87,12 +87,12 @@ const perticularStudent = () => {
         </div>
       </div>
       <div className="flex w-full items-center justify-center gap-10 mt-10">
-        <button className="p-0.5 w-[85px] rounded-lg font-semibold bg-green-600 text-white cursor-pointer hover:bg-green-500 hover:text-black">
+        <Link to={`/student/edit/${slug}`} className="p-0.5 w-[85px] flex items-center justify-center rounded-lg font-semibold bg-green-600 text-white cursor-pointer hover:bg-green-500 hover:text-black">
           Edit
-        </button>
-        <button className="p-0.5 w-[85px] rounded-lg font-semibold bg-red-600 text-white cursor-pointer hover:bg-red-500 hover:text-black">
+        </Link>
+        <Link className="p-0.5 w-[85px] rounded-lg font-semibold flex items-center justify-center bg-red-600 text-white cursor-pointer hover:bg-red-500 hover:text-black">
           Delete
-        </button>
+        </Link>
        
       </div>
       <Footer />

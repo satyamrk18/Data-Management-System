@@ -38,7 +38,7 @@ app.get("/students",getStudent);
 //find perticular
 app.get("/student/:slug",getPerticularStudent);
 //update student details
-app.put("/student/:slug",putUpdateStudent);
+app.put("/student/edit/:slug",putUpdateStudent);
 //student log in
 app.post("/studentlogin",postStudentLogin);
 
