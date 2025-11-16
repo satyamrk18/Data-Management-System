@@ -6,7 +6,7 @@ const studentSchema = new Schema(
     father_name: { type: String, require: true },
     mother_name: { type: String, require: true },
     address: { type: String, require: true },
-    rollNo: { type: Number, require: true },
+    rollNo: { type: Number, require: true,unique:true },
     year_of_study: { type: String, require: true,enum:["First year","Second year","Third year","BE"] },
     branch: { type: String, require: true},
     aadhaNo: { type: Number, require: true },
