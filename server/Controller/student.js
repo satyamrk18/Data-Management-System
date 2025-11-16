@@ -3,7 +3,9 @@ import fs from "fs";
 import Student from "./../Model/Student.js";
 //add student
 const poststudent = async (req, res) => {
-  const {
+  try
+  {
+    const {
     name,
     father_name,
     mother_name,
@@ -53,8 +55,15 @@ const poststudent = async (req, res) => {
   res.json({
     success: true,
     data: saveStudet,
-    message: "model works successfully",
+    message: "student added successfully",
   });
+  }
+  catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
 };
 //get all students
 const getStudent = async (req, res) => {

@@ -1,20 +1,35 @@
 import Footer from "./../components/Footer";
+import axios from "axios";
 import { useState, useEffect } from "react";
 const AddStudent = () => {
-  const [data, setData] = useState([
-    {
-      name: "",
-      father_name: "",
-      mother_name: "",
-      address: "",
-      rollNo: "",
-      year_of_study: "",
-      year: "",
-      branch: "",
-      aadhaNo: "",
-      year: "",
-    },
-  ]);
+  const [data, setData] = useState({
+    name: "",
+    father_name: "",
+    mother_name: "",
+    address: "",
+    rollNo: "",
+    year_of_study: "",
+    year: "",
+    branch: "",
+    aadhaNo: "",
+  });
+  const saveStudent = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/addstudent`,
+        data
+      );
+
+      if (response.data.success) {
+        alert("Student added successfully");
+      } else {
+        alert(response.data.message);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Error adding student");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
       <h1 className="text-3xl font-semibold mb-6 text-blue-700">Add Student</h1>
@@ -88,6 +103,7 @@ const AddStudent = () => {
                   setData({ ...data, year_of_study: e.target.value });
                 }}
               >
+                <option value="">Select</option>
                 <option>First year</option>
                 <option>Second year</option>
                 <option>Third year</option>
@@ -104,6 +120,8 @@ const AddStudent = () => {
                   setData({ ...data, branch: e.target.value });
                 }}
               >
+                <option value="">Select</option>
+
                 <option>Information Technology</option>
                 <option>Computer Engineering</option>
                 <option>Mechanical Engineering</option>
@@ -163,7 +181,7 @@ const AddStudent = () => {
             type="button"
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-lg hover:bg-blue-700 transition"
             onClick={() => {
-              console.log(data);
+              saveStudent();
             }}
           >
             Submit
