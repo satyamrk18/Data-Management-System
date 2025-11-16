@@ -1,6 +1,7 @@
 import Footer from "./../components/Footer";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
 const AddStudent = () => {
   const [data, setData] = useState({
     name: "",
@@ -22,6 +23,9 @@ const AddStudent = () => {
 
       if (response.data.success) {
         alert("Student added successfully");
+        let slug = response.data.data.slug;
+        console.log(slug);
+        window.location.href = `/student/${slug}`;
       } else {
         alert(response.data.message);
       }
