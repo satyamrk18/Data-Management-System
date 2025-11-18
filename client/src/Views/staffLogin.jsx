@@ -20,9 +20,7 @@ const staffLogIn = () => {
         staffData
       );
       if (response.data.success) {
-        alert(response.data.message);
         setstaffData({ email: "", password: "" });
-        alert(response.data.data.email);
         localStorage.setItem("staff", response.data.data.email);
         window.location.href = "/students";
       }
