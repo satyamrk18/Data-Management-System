@@ -116,19 +116,8 @@ const getPerticularStudent = async (req, res) => {
 //update student details
 const putUpdateStudent = async (req, res) => {
   const { slug } = req.params;
-  const {
-    name,
-    father_name,
-    mother_name,
-    address,
-    rollNo,
-    year_of_study,
-    branch,
-    aadhaNo,
-  } = req.body;
-  const EditStudent = await Student.findOneAndUpdate(
-    { slug: slug },
-    {
+  try {
+    const {
       name,
       father_name,
       mother_name,
@@ -137,40 +126,62 @@ const putUpdateStudent = async (req, res) => {
       year_of_study,
       branch,
       aadhaNo,
-    },
-    { new: true }
-  );
-  if (EditStudent) {
-    const word = branch.split(" ");
-    const branch_ID = (word[0][0] + word[1][0]).toUpperCase();
-    const uniqueNo = `${year}${branch_ID}${aadhaNo
-      .toString()
-      .substring(0, 4)}-${rollNo}`.trim();
+      year,
+    } = req.body;
+    const EditStudent = await Student.findOneAndUpdate(
+      { slug: slug },
+      {
+        name,
+        father_name,
+        mother_name,
+        address,
+        rollNo,
+        year_of_study,
+        branch,
+        aadhaNo,
+        year,
+      },
+      { new: true }
+    );
+    if (EditStudent) {
+      const word = branch.split(" ");
+      const branch_ID = (word[0][0] + word[1][0]).toUpperCase();
+      const uniqueNo = `${year}${branch_ID}${aadhaNo
+        .toString()
+        .substring(0, 4)}-${rollNo}`.trim();
 
-    //college unique ID generation
-    EditStudent.college_ID = `${
-      year_of_study == "First year"
-        ? `F${uniqueNo}`
-        : year_of_study == "Second year"
-        ? `S${uniqueNo}`
-        : year_of_study == "Third year"
-        ? `T${uniqueNo}`
-        : year_of_study == "BE"
-        ? `B${uniqueNo}`
-        : ""
-    }`;
-    //slug generation
-    EditStudent.slug = `${name.toLowerCase().replace(/\s+/g, "-")}-${uniqueNo}`;
-    await EditStudent.save();
-    res.json({
-      success: true,
-      data: EditStudent,
-      message: "student update successfully",
-    });
-  } else {
-    res.status(400).json({
+      //college unique ID generation
+      EditStudent.college_ID = `${
+        year_of_study == "First year"
+          ? `F${uniqueNo}`
+          : year_of_study == "Second year"
+          ? `S${uniqueNo}`
+          : year_of_study == "Third year"
+          ? `T${uniqueNo}`
+          : year_of_study == "BE"
+          ? `B${uniqueNo}`
+          : ""
+      }`;
+      //slug generation
+      EditStudent.slug = `${name
+        .toLowerCase()
+        .replace(/\s+/g, "-")}-${uniqueNo}`;
+      await EditStudent.save();
+      res.json({
+        success: true,
+        data: EditStudent,
+        message: "student update successfully",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "student not found",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
       success: false,
-      message: "student not found",
+      message: "internal server error",
     });
   }
 };
