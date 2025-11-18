@@ -1,6 +1,7 @@
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import Student from "./../Model/Student.js";
+import { runInThisContext } from "vm";
 //add student
 const poststudent = async (req, res) => {
   try {
@@ -100,13 +101,18 @@ const getStudent = async (req, res) => {
 const SearchStudentByName = async (req, res) => {
   try {
     const { q } = req.query;
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        message: "please enter a valid name to search",
+      });
+    }
     const search = await Student.find({
       name: { $regex: q, $options: "i" },
     });
     if (search.length === 0) {
       return res.status(404).json({
         success: false,
-        data: [],
         message: "student not found",
       });
     } else {

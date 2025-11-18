@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
+  const [search, setSearch] = useState();
   const navigate = useNavigate();
 
   const loadStudents = async () => {
@@ -23,19 +24,69 @@ const Students = () => {
     loadStudents();
   }, []);
 
+  //cosnt search student
+  const searchStudent = async () => {
+    try{
+      const searchresult = await axios.get(
+      `${import.meta.env.VITE_API_URL}/student/search?q=${search}`
+    );
+    if (searchresult) {
+      setSearch(searchresult.data.data);
+      console.log(searchresult.data.data);
+    }
+    else{
+      alert("student not found");
+    }
+    }
+    catch(err){
+      alert(err.response.data.message);
+    }
+  };
+
   return (
     <div className="p-6">
       <Navbar />
+      {/* search students here */}
+      <div className="w-full flex flex-row items-center justify-evenly">
+        <input
+          type="search"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Enter Student name"
+          className="border rounded-lg p-0.5 w-2xl"
+        />
+        <button
+          className="bg-blue-400 p-1 text-white rounded-xl font-semibold cursor-pointer hover:text-black"
+          onClick={() => {
+            searchStudent();
+          }}
+        >
+          Search
+        </button>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse bg-white shadow-sm rounded-xl overflow-hidden">
           <thead className="bg-gray-100 text-left">
             <tr>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">Roll No</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">Name</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">Year of Study</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">Academic Year</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">College ID</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-700">Aadhar No.</th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                Roll No
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                Name
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                Year of Study
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                Academic Year
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                College ID
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-700">
+                Aadhar No.
+              </th>
             </tr>
           </thead>
 
