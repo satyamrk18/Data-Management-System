@@ -220,10 +220,34 @@ const postStudentLogin = async (req, res) => {
     });
   }
 };
+//delete student
+const deleteStudent = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const deleteStudent = await Student.findOneAndDelete({ slug });
+    if (deleteStudent) {
+      res.status(200).json({
+        success: true,
+        message: "student deleted successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "student not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
 export {
   poststudent,
   getStudent,
   getPerticularStudent,
   putUpdateStudent,
   postStudentLogin,
+  deleteStudent,
 };

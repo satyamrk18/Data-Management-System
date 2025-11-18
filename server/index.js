@@ -2,7 +2,7 @@ import express, { json } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import {poststudent,getStudent,getPerticularStudent,putUpdateStudent,postStudentLogin} from "./Controller/student.js";
+import {poststudent,getStudent,getPerticularStudent,putUpdateStudent,postStudentLogin,deleteStudent} from "./Controller/student.js";
 import {postStaff,staffLogIn} from "./Controller/staff.js"
 //all midleware
 dotenv.config();
@@ -41,7 +41,8 @@ app.get("/student/:slug",getPerticularStudent);
 app.put("/student/edit/:slug",putUpdateStudent);
 //student log in
 app.post("/studentlogin",postStudentLogin);
-
+//delete student
+app.delete("/student/delete/:slug",deleteStudent)
 //STAFF 
 app.post("/addStaff",postStaff);
 //check email and password for staff log in
