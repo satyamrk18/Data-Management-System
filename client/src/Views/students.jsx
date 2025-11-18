@@ -1,4 +1,5 @@
 import axios from "axios";
+import Navbar from "../components/navbar";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,8 +25,7 @@ const Students = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">All Students</h1>
-
+      <Navbar />
       <div className="overflow-x-auto">
         <table className="w-full border-collapse bg-white shadow-sm rounded-xl overflow-hidden">
           <thead className="bg-gray-100 text-left">
