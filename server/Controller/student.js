@@ -96,6 +96,33 @@ const getStudent = async (req, res) => {
     });
   }
 };
+//search student by name
+const SearchStudentByName = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const search = await Student.find({
+      name: { $regex: q, $options: "i" },
+    });
+    if (search.length === 0) {
+      return res.status(404).json({
+        success: false,
+        data: [],
+        message: "student not found",
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        data: search,
+        message: "student search successfully",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+    });
+  }
+};
 //get perticuar student by its sug
 const getPerticularStudent = async (req, res) => {
   const { slug } = req.params;
@@ -246,6 +273,7 @@ const deleteStudent = async (req, res) => {
 export {
   poststudent,
   getStudent,
+  SearchStudentByName,
   getPerticularStudent,
   putUpdateStudent,
   postStudentLogin,
