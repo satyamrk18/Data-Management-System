@@ -176,6 +176,13 @@ const getPerticularStudent = async (req, res) => {
 //update student details
 const putUpdateStudent = async (req, res) => {
   const { slug } = req.params;
+  const { user } = req;
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: "you are not authorized person",
+    });
+  }
   try {
     const {
       name,
