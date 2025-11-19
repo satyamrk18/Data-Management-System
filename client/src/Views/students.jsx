@@ -7,8 +7,10 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isSearched, setIsSearched] = useState(false); // New state to track if a search was attempted
   const navigate = useNavigate();
 
+  //  Function to load all students
   const loadStudents = async () => {
     try {
       const response = await axios.get(
@@ -21,17 +23,27 @@ const Students = () => {
           },
         }
       );
-
       setStudents(response.data.data);
+      setSearchResults([]);
+      setIsSearched(false);
     } catch (err) {
-      alert(err.message || "Failed to load students");
+      alert("you are not authorized person" || "Failed to load students");
     }
   };
 
-  // search student function
+  //  Load all students when the component mounts
+  useEffect(() => {
+    loadStudents();
+  }, []); 
+
+  // Search student function
   const searchStudent = async () => {
+    setSearchResults([]);
+    setIsSearched(true);
+
     if (!searchText.trim()) {
       alert("Please enter a valid name");
+      // If search text is empty, display all students again
       loadStudents();
       return;
     }
@@ -42,16 +54,35 @@ const Students = () => {
       );
 
       if (res.data.data.length === 0) {
+        // Student not found alert is now triggered here
         alert("Student not found");
-        setSearchResults([]);
         return;
       }
 
       setSearchResults(res.data.data);
     } catch (err) {
-      alert("student not found");
+      // Catch potential API errors, not just "not found"
+      alert("An error occurred during search.");
     }
   };
+
+  // 4. Function to handle input change and reset view
+  const handleSearchTextChange = (e) => {
+    const text = e.target.value;
+    setSearchText(text);
+
+    // If the search box is cleared, reset the view to display all students
+    if (text === "") {
+      setIsSearched(false);
+    }
+  };
+
+  // Determine which list to display
+  const displayList =
+    isSearched && searchResults.length > 0 ? searchResults : students;
+
+  // Determine if we should show the "Student not found" alert based on the state
+  const shouldShowNotFoundAlert = isSearched && searchResults.length === 0;
 
   return (
     <div className="p-6">
@@ -62,7 +93,7 @@ const Students = () => {
         <input
           type="search"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={handleSearchTextChange} // Use the new handler
           placeholder="Enter Student name"
           className="border rounded-lg p-0.5 w-2xl"
         />
@@ -99,43 +130,30 @@ const Students = () => {
             </tr>
           </thead>
 
-          {/* FIXED TERNARY OPERATOR */}
-          {searchText === "" || searchResults.length === 0 ? (
-            <tbody>
-              {students.map((s) => (
-                <tr
-                  key={s.college_ID}
-                  className="border-t cursor-pointer hover:bg-gray-100"
-                  onClick={() => navigate(`/student/${s.slug}`)}
-                >
-                  <td className="px-4 py-3 text-sm">{s.rollNo}</td>
-                  <td className="px-4 py-3 text-sm">{s.name}</td>
-                  <td className="px-4 py-3 text-sm">{s.year_of_study}</td>
-                  <td className="px-4 py-3 text-sm">{s.year}</td>
-                  <td className="px-4 py-3 text-sm">{s.college_ID}</td>
-                  <td className="px-4 py-3 text-sm">{s.aadhaNo}</td>
-                </tr>
-              ))}
-            </tbody>
-          ) : (
-            <tbody>
-              {searchResults.map((s) => (
-                <tr
-                  key={s.college_ID}
-                  className="border-t cursor-pointer hover:bg-gray-100"
-                  onClick={() => navigate(`/student/${s.slug}`)}
-                >
-                  <td className="px-4 py-3 text-sm">{s.rollNo}</td>
-                  <td className="px-4 py-3 text-sm">{s.name}</td>
-                  <td className="px-4 py-3 text-sm">{s.year_of_study}</td>
-                  <td className="px-4 py-3 text-sm">{s.year}</td>
-                  <td className="px-4 py-3 text-sm">{s.college_ID}</td>
-                  <td className="px-4 py-3 text-sm">{s.aadhaNo}</td>
-                </tr>
-              ))}
-            </tbody>
-          )}
+          <tbody>
+            {displayList.map((s) => (
+              <tr
+                key={s.college_ID}
+                className="border-t cursor-pointer hover:bg-gray-100"
+                onClick={() => navigate(`/student/${s.slug}`)}
+              >
+                <td className="px-4 py-3 text-sm">{s.rollNo}</td>
+                <td className="px-4 py-3 text-sm">{s.name}</td>
+                <td className="px-4 py-3 text-sm">{s.year_of_study}</td>
+                <td className="px-4 py-3 text-sm">{s.year}</td>
+                <td className="px-4 py-3 text-sm">{s.college_ID}</td>
+                <td className="px-4 py-3 text-sm">{s.aadhaNo}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
+
+        {/* Display "Student not found" message */}
+        {shouldShowNotFoundAlert && (
+          <div className="p-4 text-center text-red-500 font-semibold">
+            Student not found.
+          </div>
+        )}
       </div>
     </div>
   );

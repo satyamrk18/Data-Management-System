@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 app.post("/addstudent", JWTcheck, poststudent);
 
 //get all students
-app.get("/students", JWTcheck, getStudent);
+app.get("/students",JWTcheck,  getStudent);
 
 //search student by name
 app.get("/student/search", SearchStudentByName);
