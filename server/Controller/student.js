@@ -1,6 +1,5 @@
 import PDFDocument from "pdfkit";
 import Student from "./../Model/Student.js";
-import { runInThisContext } from "vm";
 //add student
 const poststudent = async (req, res) => {
   const { user } = req;
@@ -89,8 +88,15 @@ const poststudent = async (req, res) => {
 };
 //get all students
 const getStudent = async (req, res) => {
+  const { user } = req;
   const response = await Student.find();
   if (response) {
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
     res.status(200).json({
       success: true,
       data: response,
