@@ -1,10 +1,16 @@
 import PDFDocument from "pdfkit";
-import fs from "fs";
 import Student from "./../Model/Student.js";
 import { runInThisContext } from "vm";
 //add student
 const poststudent = async (req, res) => {
+  const { user } = req;
   try {
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
     const {
       name,
       father_name,

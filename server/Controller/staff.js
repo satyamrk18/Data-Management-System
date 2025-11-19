@@ -1,4 +1,5 @@
 import Staff from "./../Model/Staff.js";
+import jwt from "jsonwebtoken";
 //add staff
 const postStaff = async (req, res) => {
   const { email, password } = req.body;
@@ -31,33 +32,34 @@ const postStaff = async (req, res) => {
   }
 };
 //check staff log in
-const staffLogIn = async (req,res)=>
-{
-  
-  try{
-    const {email,password}= req.body;
-  const response = await Staff.findOne({email,password})
-  if(response)
-  {
-    res.status(200).json({
-      success:true,
-      data:response,
-      message:"staff found successfully"
-    })
-  }
-  else{
-    res.status(401).json({
-      success:false,
-      message:"please reenter email and password correctly."
-    })
-  }
-  }
-  catch(error)
-  {
+const staffLogIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const response = await Staff.findOne({ email, password });
+    if (response) {
+      const token = jwt.sign(
+        { id: response._id, email: response.email }, //payload
+        process.env.JWT_SECRET, //secret key
+        { expiresIn: "1h" } //options
+      );
+
+      res.status(200).json({
+        success: true,
+        data: response,
+        message: "staff found successfully",
+        token,
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "please reenter email and password correctly.",
+      });
+    }
+  } catch (error) {
     res.status(500).json({
-      success:false,
-      message:"internal server error, please try again letter"
-    })
+      success: false,
+      message: "internal server error, please try again letter",
+    });
   }
-}
-export { postStaff,staffLogIn };
+};
+export { postStaff, staffLogIn };
