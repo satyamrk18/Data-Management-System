@@ -89,14 +89,13 @@ const poststudent = async (req, res) => {
 //get all students
 const getStudent = async (req, res) => {
   const { user } = req;
+  res.status(200).json({
+    success: true,
+    data: response,
+    message: "all student find successfully",
+  });
   const response = await Student.find();
   if (response) {
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "you are not authorized person",
-      });
-    }
     res.status(200).json({
       success: true,
       data: response,
@@ -145,10 +144,9 @@ const SearchStudentByName = async (req, res) => {
 const getPerticularStudent = async (req, res) => {
   try {
     const { slug } = req.params;
-    const {user}= req;
+    const { user } = req;
     const student = await Student.findOne({ slug });
-    if(!user)
-    {
+    if (!user) {
       return res.status(401).json({
         success: false,
         message: "you are not authorized person",
@@ -175,15 +173,15 @@ const getPerticularStudent = async (req, res) => {
 };
 //update student details
 const putUpdateStudent = async (req, res) => {
-  const { slug } = req.params;
-  const { user } = req;
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: "you are not authorized person",
-    });
-  }
   try {
+    const { slug } = req.params;
+    const { user } = req;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
     const {
       name,
       father_name,
@@ -290,7 +288,14 @@ const postStudentLogin = async (req, res) => {
 //delete student
 const deleteStudent = async (req, res) => {
   try {
+    const { user } = req;
     const { slug } = req.params;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
     const deleteStudent = await Student.findOneAndDelete({ slug });
     if (deleteStudent) {
       res.status(200).json({
