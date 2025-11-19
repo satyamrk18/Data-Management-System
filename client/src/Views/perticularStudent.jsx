@@ -11,15 +11,20 @@ const perticularStudent = () => {
   const loadStudent = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/student/${slug}`
+        `${import.meta.env.VITE_API_URL}/student/${slug}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "staffjwtauthenticationToken"
+            )}`,
+          },
+        }
       );
       if (response) {
         setStudent(response.data.data);
-      } else {
-        alert(response.data.message);
       }
     } catch (err) {
-      alert(err.response);
+      console.log(err.response);
     }
   };
   //load the perticular student data
@@ -31,7 +36,14 @@ const perticularStudent = () => {
     try {
       if (confirm("Are you sure you want to delete this student?") == true) {
         const response = await axios.delete(
-          `${import.meta.env.VITE_API_URL}/student/delete/${slug}`
+          `${import.meta.env.VITE_API_URL}/student/delete/${slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem(
+                "staffjwtauthenticationToken"
+              )}`,
+            },
+          }
         );
 
         window.location.href = "/students";

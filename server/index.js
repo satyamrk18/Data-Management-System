@@ -30,28 +30,29 @@ const conn = async () => {
   }
 };
 
-//jwt authentication middleware
+// JWT authentication middleware
+//middleware JWT authentication
 const JWTcheck = (req, res, next) => {
   try {
     const { authorization } = req.headers;
+
     if (!authorization) {
-      return res.status(402).json({
-        success: false,
-        message: "you are not authorized person",
-      });
+      return res.status(400).json({ message: "Authorization token missing" });
     }
+
     const token = authorization.split(" ")[1];
-    const decoedToken = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoedToken;
-    next();
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decodedToken;   
+
+    next(); 
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "internal server error",
-    });
+    return res.status(401).json({ message: "Invalid JWT token" });
   }
 };
+
+export default JWTcheck;
 
 //server health checking
 app.get("/", (req, res) => {
@@ -62,30 +63,31 @@ app.get("/", (req, res) => {
 });
 
 //STUDENT
-app.post("/addstudent",JWTcheck, poststudent);
+app.post("/addstudent", JWTcheck, poststudent);
 
 //get all students
-app.get("/students",JWTcheck, getStudent);
+app.get("/students", JWTcheck, getStudent);
 
 //search student by name
 app.get("/student/search", SearchStudentByName);
 
 //find perticular
-app.get("/student/:slug",JWTcheck, getPerticularStudent);
+app.get("/student/:slug", JWTcheck, getPerticularStudent);
 
 //update student details
-app.put("/student/edit/:slug",JWTcheck, putUpdateStudent);
+app.put("/student/edit/:slug", JWTcheck, putUpdateStudent);
 
 //student log in
 app.post("/studentlogin", postStudentLogin);
 
 //delete student
-app.delete("/student/delete/:slug",JWTcheck, deleteStudent);
+app.delete("/student/delete/:slug", JWTcheck, deleteStudent);
 
 //STAFF
 app.post("/addStaff", postStaff);
 //check email and password for staff log in
 app.post("/stafflogin", staffLogIn);
+
 
 app.listen(8080, () => {
   console.log("server is running");

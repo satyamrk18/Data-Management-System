@@ -18,7 +18,12 @@ const EditStudent = () => {
   //get student data from slug
   const loadStudent = async () => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/student/${slug}`
+      `${import.meta.env.VITE_API_URL}/student/${slug}`,
+         {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("staffjwtauthenticationToken")}`,
+          },
+        }
     );
     setData(response.data.data);
   };
@@ -29,7 +34,11 @@ const EditStudent = () => {
   //update student data
   const UpdateStudent = async () => {
     const response = await axios.put(
-      `${import.meta.env.VITE_API_URL}/student/edit/${slug}`,data
+      `${import.meta.env.VITE_API_URL}/student/edit/${slug}`,data,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("staffjwtauthenticationToken")}`,
+          },
+        }
     );
     if (response) {
       alert(response.data.message);

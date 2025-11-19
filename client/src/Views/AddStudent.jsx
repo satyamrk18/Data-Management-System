@@ -18,7 +18,11 @@ const AddStudent = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/addstudent`,
-        data
+        data,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("staffjwtauthenticationToken")}`,
+          }
+        }
       );
 
       if (response.data.success) {

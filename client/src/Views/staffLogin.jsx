@@ -16,12 +16,20 @@ const staffLogIn = () => {
     }
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/staffLogIn`,
+        `${import.meta.env.VITE_API_URL}/stafflogin`,
         staffData
       );
       if (response.data.success) {
         setstaffData({ email: "", password: "" });
         localStorage.setItem("staff", response.data.data.email);
+        localStorage.setItem(
+          "staffjwtauthenticationToken",
+          response.data.token
+        );
+        // set default Authorization header for future axios requests
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
         window.location.href = "/students";
       }
     } catch (error) {

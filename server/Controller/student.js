@@ -1,6 +1,7 @@
 import PDFDocument from "pdfkit";
 import Student from "./../Model/Student.js";
-//add student
+
+// add student
 const poststudent = async (req, res) => {
   const { user } = req;
   try {
@@ -10,6 +11,7 @@ const poststudent = async (req, res) => {
         message: "you are not authorized person",
       });
     }
+
     const {
       name,
       father_name,
@@ -44,7 +46,7 @@ const poststudent = async (req, res) => {
         .toString()
         .substring(0, 4)}-${rollNo}`.trim();
 
-      //college unique ID generation
+      // college unique ID generation
       const college_ID = `${
         year_of_study == "First year"
           ? `F${uniqueNo}`
@@ -56,7 +58,8 @@ const poststudent = async (req, res) => {
           ? `B${uniqueNo}`
           : ""
       }`;
-      //slug generation
+
+      // slug generation
       const slug = `${name.toLowerCase().replace(/\s+/g, "-")}-${uniqueNo}`;
       const studentData = new Student({
         name,
@@ -68,7 +71,6 @@ const poststudent = async (req, res) => {
         branch,
         aadhaNo,
         year,
-
         college_ID,
         slug,
       });
@@ -80,35 +82,48 @@ const poststudent = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
     });
   }
 };
-//get all students
+
+// get all students
 const getStudent = async (req, res) => {
-  const { user } = req;
-  res.status(200).json({
-    success: true,
-    data: response,
-    message: "all student find successfully",
-  });
-  const response = await Student.find();
-  if (response) {
-    res.status(200).json({
+  try {
+    const { user } = req;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
+
+    const response = await Student.find();
+    if (response && response.length > 0) {
+      return res.status(200).json({
+        success: true,
+        data: response,
+        message: "all students fetched successfully",
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      data: response,
-      message: "all student find successfully",
+      data: [],
+      message: "no students found",
     });
-  } else {
-    res.json({
-      success: false,
-      message: "data not found",
-    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "internal server error" });
   }
 };
-//search student by name
+
+// search student by name
 const SearchStudentByName = async (req, res) => {
   try {
     const { q } = req.query;
@@ -134,13 +149,15 @@ const SearchStudentByName = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "internal server error",
     });
   }
 };
-//get perticuar student by its sug
+
+// get particular student by slug
 const getPerticularStudent = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -165,13 +182,15 @@ const getPerticularStudent = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "internal server error",
     });
   }
 };
-//update student details
+
+// update student details
 const putUpdateStudent = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -215,7 +234,7 @@ const putUpdateStudent = async (req, res) => {
         .toString()
         .substring(0, 4)}-${rollNo}`.trim();
 
-      //college unique ID generation
+      // college unique ID generation
       EditStudent.college_ID = `${
         year_of_study == "First year"
           ? `F${uniqueNo}`
@@ -227,7 +246,7 @@ const putUpdateStudent = async (req, res) => {
           ? `B${uniqueNo}`
           : ""
       }`;
-      //slug generation
+      // slug generation
       EditStudent.slug = `${name
         .toLowerCase()
         .replace(/\s+/g, "-")}-${uniqueNo}`;
@@ -244,13 +263,15 @@ const putUpdateStudent = async (req, res) => {
       });
     }
   } catch (err) {
+    console.error(err);
     res.status(500).json({
       success: false,
       message: "internal server error",
     });
   }
 };
-//student log in by college id and mother name and making pdf
+
+// student log in by college id and mother name and making pdf
 const postStudentLogin = async (req, res) => {
   const { college_ID, mother_name } = req.body;
   const studentData = await Student.findOne({
@@ -258,7 +279,7 @@ const postStudentLogin = async (req, res) => {
     mother_name: mother_name,
   });
   if (studentData) {
-    //making the pdf of student data
+    // making the pdf of student data
     const doc = new PDFDocument();
     res.setHeader(
       "Content-Disposition",
@@ -285,7 +306,8 @@ const postStudentLogin = async (req, res) => {
     });
   }
 };
-//delete student
+
+// delete student
 const deleteStudent = async (req, res) => {
   try {
     const { user } = req;
@@ -309,12 +331,14 @@ const deleteStudent = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "internal server error",
     });
   }
 };
+
 export {
   poststudent,
   getStudent,
