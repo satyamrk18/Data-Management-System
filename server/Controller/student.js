@@ -143,18 +143,33 @@ const SearchStudentByName = async (req, res) => {
 };
 //get perticuar student by its sug
 const getPerticularStudent = async (req, res) => {
-  const { slug } = req.params;
-  const student = await Student.findOne({ slug });
-  if (student) {
-    res.status(200).json({
-      success: true,
-      data: student,
-      message: "perticukar student find successfully",
-    });
-  } else {
-    res.status(404).json({
+  try {
+    const { slug } = req.params;
+    const {user}= req;
+    const student = await Student.findOne({ slug });
+    if(!user)
+    {
+      return res.status(401).json({
+        success: false,
+        message: "you are not authorized person",
+      });
+    }
+    if (student) {
+      res.status(200).json({
+        success: true,
+        data: student,
+        message: "perticukar student find successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "student not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "student not found",
+      message: "internal server error",
     });
   }
 };

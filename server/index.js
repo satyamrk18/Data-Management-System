@@ -68,7 +68,7 @@ app.post("/addstudent",JWTcheck, poststudent);
 app.get("/students",JWTcheck, getStudent);
 
 //search student by name
-app.get("/student/search",JWTcheck, SearchStudentByName);
+app.get("/student/search", SearchStudentByName);
 
 //find perticular
 app.get("/student/:slug",JWTcheck, getPerticularStudent);
