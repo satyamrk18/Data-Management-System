@@ -14,7 +14,6 @@ const staffLogIn = () => {
     if (!staffData.email || !staffData.password) {
       return alert("All feilds are required");
     }
-    console.log("called");
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/stafflogin`,
